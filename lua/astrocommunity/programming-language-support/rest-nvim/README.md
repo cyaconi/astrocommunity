@@ -1,6 +1,6 @@
 # Rest.nvim
 
-A fast Neovim http client written in Lua.
+A fast Neovim http client written in Lua. Updated to v2.
 
 ### Dependencies
 - System-wide

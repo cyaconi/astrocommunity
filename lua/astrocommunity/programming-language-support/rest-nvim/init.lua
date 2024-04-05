@@ -1,32 +1,38 @@
 return {
   {
-    "rest-nvim/rest.nvim",
-    ft = { "http", "json" },
-    cmd = {
-      "RestNvim",
-      "RestNvimPreview",
-      "RestNvimLast",
+    "vhyrro/luarocks.nvim",
+    branch = "go-away-python",
+    opts = {
+      rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }, -- Specify LuaRocks packages to install
     },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      {
-        "AstroNvim/astrocore",
-        opts = function(_, opts)
-          local maps = opts.mappings
-          local prefix = "<Leader>r"
-          maps.n[prefix] = { desc = "RestNvim" }
-          maps.n[prefix .. "r"] = { "<Plug>RestNvim", desc = "Run request" }
-        end,
-      },
-    },
-    opts = {},
   },
   {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if opts.ensure_installed ~= "all" then
-        opts.ensure_installed = require("astrocore").list_insert_unique(opts.ensure_installed, { "http", "json" })
-      end
+    "rest-nvim/rest.nvim",
+    event = "VeryLazy",
+    ft = { "http" },
+    dependencies = {
+      {
+        "luarocks.nvim",
+      },
+      {
+        "AstroNvim/astrocore",
+        opts = {
+          mappings = {
+            n = {
+              ["<leader>r"] = { name = " Rest http" },
+              ["<leader>rr"] = { "<cmd>Rest run<cr>", desc = "Run rest http request under cursor" },
+              ["<leader>re"] = {
+                "<cmd>Telescope rest select_env<cr>",
+                desc = "Select environment file for rest testing",
+              },
+            },
+          },
+        },
+      },
+    },
+    config = function()
+      require("rest-nvim").setup()
+      require("telescope").load_extension "rest"
     end,
   },
 }
